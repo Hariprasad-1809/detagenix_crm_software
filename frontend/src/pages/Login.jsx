@@ -8,8 +8,8 @@ import logo from '../assets/logo.jpeg';
 const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('admin@crmhrm.com'); 
-  const [password, setPassword] = useState('Admin@123'); 
+  const [email, setEmail] = useState(''); 
+  const [password, setPassword] = useState(''); 
   const [rememberMe, setRememberMe] = useState(false);
 
   const styles = {

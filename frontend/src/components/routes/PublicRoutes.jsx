@@ -14,10 +14,9 @@ const PublicRoutes = ({ children }) => {
     );
   }
 
-  // If user is authenticated, redirect to dashboard or intended page
+  // If user is authenticated, always redirect to dashboard as requested
   if (isAuthenticated) {
-    const from = location.state?.from?.pathname || '/dashboard';
-    return <Navigate to={from} replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   // If not authenticated, show public routes

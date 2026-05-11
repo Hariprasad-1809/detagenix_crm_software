@@ -1,9 +1,9 @@
 // API Configuration
 const API_BASE_URL = 'http://localhost:5000/api';
 
-// Get auth token from localStorage
+// Get auth token from sessionStorage
 const getAuthToken = () => {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
   return token ? `Bearer ${token}` : null;
 };
 
@@ -30,8 +30,8 @@ const apiRequest = async (endpoint, options = {}) => {
     
     // Handle 401 Unauthorized
     if (response.status === 401) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
+      sessionStorage.removeItem('token');
+      sessionStorage.removeItem('user');
       window.location.href = '/login';
       return;
     }

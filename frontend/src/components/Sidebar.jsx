@@ -7,9 +7,12 @@ import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 import logo from "../assets/logo.jpeg";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const Sidebar = () => {
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isLeadsManagementOpen, setIsLeadsManagementOpen] = useState(false);
+
   const {
     user,
     isUserManagementOpen,
@@ -42,6 +45,8 @@ const Sidebar = () => {
   useEffect(() => {
     const crmPages = [
       "/leads-management",
+      "/crm/add-lead",
+      "/crm/lead-conversion",
       "/sales-activities",
       "/sales-pipeline",
       "/forecast",
@@ -52,6 +57,17 @@ const Sidebar = () => {
       setIsCrmOpen(true);
       setIsUserManagementOpen(false);
       setIsHrmsOpen(false);
+      setIsSettingsOpen(false);
+      
+      // Auto-expand Leads Management if on its subpages
+      if (
+        location.pathname === "/leads-management" || 
+        location.pathname === "/crm/add-lead" || 
+        location.pathname === "/crm/lead-conversion" ||
+        location.pathname === "/crm/lead-generation"
+      ) {
+        setIsLeadsManagementOpen(true);
+      }
     }
   }, [location.pathname]);
 
@@ -71,6 +87,23 @@ const Sidebar = () => {
       setIsHrmsOpen(true);
       setIsCrmOpen(false);
       setIsUserManagementOpen(false);
+      setIsSettingsOpen(false);
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const settingsPages = [
+      "/settings/company-profile",
+      "/settings/roles-permissions",
+      "/settings/security-compliance",
+      "/settings/ai-settings",
+    ];
+
+    if (settingsPages.includes(location.pathname)) {
+      setIsSettingsOpen(true);
+      setIsCrmOpen(false);
+      setIsUserManagementOpen(false);
+      setIsHrmsOpen(false);
     }
   }, [location.pathname]);
 
@@ -151,7 +184,7 @@ const Sidebar = () => {
         )}
 
         {/* CRM */}
-        {(role === "ADMIN" || role === "MANAGER" || role === "BDE") && (
+        {(role === "ADMIN" || role === "MANAGER" || role === "BDE" || role === "HR" || !role) && (
           <>
             <li
               onClick={toggleCrm}
@@ -178,29 +211,99 @@ const Sidebar = () => {
             {isCrmOpen && (
               <>
                 <li
-                  onClick={() => menuNavigate("/leads-management")}
-                  style={{ paddingLeft: "45px", cursor: "pointer" }}
+                  onClick={() => {
+                    menuNavigate("/leads-management");
+                    setIsLeadsManagementOpen(!isLeadsManagementOpen);
+                  }}
+                  style={{
+                    paddingLeft: "45px",
+                    cursor: "pointer",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
                 >
-                  Leads Management
+                  <span>Leads Management</span>
+                  {isLeadsManagementOpen ? (
+                    <FaChevronDown size={10} color="#ffffff" />
+                  ) : (
+                    <FaChevronRight size={10} color="#ffffff" />
+                  )}
                 </li>
+
+                {isLeadsManagementOpen && (
+                  <>
+                    <li
+                      onClick={() => menuNavigate("/crm/add-lead")}
+                      style={{
+                        paddingLeft: "65px",
+                        cursor: "pointer",
+                        fontSize: "14.5px",
+                        fontWeight: isActive("/crm/add-lead") ? "700" : "500",
+                        color: isActive("/crm/add-lead") ? "#ffffff" : "#e2e8f0",
+                        paddingTop: "6px",
+                        paddingBottom: "6px"
+                      }}
+                    >
+                      Add Lead
+                    </li>
+                    <li
+                      onClick={() => menuNavigate("/crm/lead-conversion")}
+                      style={{
+                        paddingLeft: "65px",
+                        cursor: "pointer",
+                        fontSize: "14.5px",
+                        fontWeight: isActive("/crm/lead-conversion") ? "700" : "500",
+                        color: isActive("/crm/lead-conversion") ? "#ffffff" : "#e2e8f0",
+                        paddingTop: "6px",
+                        paddingBottom: "6px"
+                      }}
+                    >
+                      Lead Conversion
+                    </li>
+                    <li
+                      onClick={() => menuNavigate("/crm/lead-generation")}
+                      style={{
+                        paddingLeft: "65px",
+                        cursor: "pointer",
+                        fontSize: "14.5px",
+                        fontWeight: isActive("/crm/lead-generation") ? "700" : "500",
+                        color: isActive("/crm/lead-generation") ? "#ffffff" : "#e2e8f0",
+                        paddingTop: "6px",
+                        paddingBottom: "6px"
+                      }}
+                    >
+                      Lead Generation
+                    </li>
+                  </>
+                )}
 
                 <li
                   onClick={() => menuNavigate("/sales-activities")}
-                  style={{ paddingLeft: "45px", cursor: "pointer" }}
+                  style={{ 
+                    paddingLeft: "45px", 
+                    cursor: "pointer",
+                  }}
                 >
                   Sales Activities
                 </li>
 
                 <li
                   onClick={() => menuNavigate("/sales-pipeline")}
-                  style={{ paddingLeft: "45px", cursor: "pointer" }}
+                  style={{ 
+                    paddingLeft: "45px", 
+                    cursor: "pointer",
+                  }}
                 >
                   Sales Pipeline & Forecast
                 </li>
 
                 <li
                   onClick={() => menuNavigate("/customer-management")}
-                  style={{ paddingLeft: "45px", cursor: "pointer" }}
+                  style={{ 
+                    paddingLeft: "45px", 
+                    cursor: "pointer",
+                  }}
                 >
                   Customer Management
                 </li>
@@ -246,20 +349,29 @@ const Sidebar = () => {
 
             <li
               onClick={() => menuNavigate("/hrms/employee-profile")}
-              style={{ paddingLeft: "45px", cursor: "pointer" }}
+              style={{ 
+                paddingLeft: "45px", 
+                cursor: "pointer",
+              }}
             >
               Employee Profile
             </li>
 
             <li
               onClick={() => menuNavigate("/hrms/leave-management")}
-              style={{ paddingLeft: "45px", cursor: "pointer" }}
+              style={{ 
+                paddingLeft: "45px", 
+                cursor: "pointer",
+              }}
             >
               Leave Management
             </li>
             <li
               onClick={() => navigate("/hrms/project-managers")}
-              style={{ paddingLeft: "45px", cursor: "pointer" }}
+              style={{ 
+                paddingLeft: "45px", 
+                cursor: "pointer",
+              }}
             >
               Project Managers
             </li>
@@ -269,14 +381,20 @@ const Sidebar = () => {
               <>
                 <li
                   onClick={() => menuNavigate("/hrms/employees-onboarding")}
-                  style={{ paddingLeft: "45px", cursor: "pointer" }}
+                  style={{ 
+                    paddingLeft: "45px", 
+                    cursor: "pointer",
+                  }}
                 >
                   Employees Onboarding
                 </li>
 
                 <li
                   onClick={() => menuNavigate("/hrms/payroll-management")}
-                  style={{ paddingLeft: "45px", cursor: "pointer" }}
+                  style={{ 
+                    paddingLeft: "45px", 
+                    cursor: "pointer",
+                  }}
                 >
                   Payroll Management
                 </li>
@@ -293,14 +411,69 @@ const Sidebar = () => {
   </>
 )}
         {/* AI CENTER */}
-        <li>
-          <RiRobot2Fill size={16} color="#ffffff" /> AI Center
+        <li
+          onClick={() => menuNavigate("/ai-center")}
+          style={{
+            backgroundColor: isActive("/ai-center") ? "#0ea5e9" : "transparent",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <RiRobot2Fill size={16} color="#ffffff" />
+          <span style={{ marginLeft: "10px" }}>AI Center</span>
         </li>
 
         {/* SETTINGS */}
-        <li>
-          <IoSettings size={16} color="#ffffff" /> Settings
+        <li
+          onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+          style={{
+            backgroundColor: isSettingsOpen ? "#0ea5e9" : "transparent",
+            cursor: "pointer",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <IoSettings size={16} color="#ffffff" />
+            <span style={{ marginLeft: "10px" }}>Settings</span>
+          </div>
+          {isSettingsOpen ? (
+            <FaChevronDown size={12} color="#ffffff" />
+          ) : (
+            <FaChevronRight size={12} color="#ffffff" />
+          )}
         </li>
+
+        {isSettingsOpen && (
+          <>
+            <li
+              onClick={() => menuNavigate("/settings/company-profile")}
+              style={{ paddingLeft: "45px", cursor: "pointer", fontSize: "14px" }}
+            >
+              Company Profile
+            </li>
+            <li
+              onClick={() => menuNavigate("/settings/roles-permissions")}
+              style={{ paddingLeft: "45px", cursor: "pointer", fontSize: "14px" }}
+            >
+              Roles & Permissions
+            </li>
+            <li
+              onClick={() => menuNavigate("/settings/security-compliance")}
+              style={{ paddingLeft: "45px", cursor: "pointer", fontSize: "14px" }}
+            >
+              Security & Compliance
+            </li>
+            <li
+              onClick={() => menuNavigate("/settings/ai-settings")}
+              style={{ paddingLeft: "45px", cursor: "pointer", fontSize: "14px" }}
+            >
+              AI Settings
+            </li>
+          </>
+        )}
 
         {/* LOGOUT */}
         <li

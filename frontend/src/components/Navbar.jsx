@@ -3,7 +3,7 @@
 
 
 // const Navbar = () => {
-//   const name = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).name : 'Guest';
+//   const name = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')).name : 'Guest';
 //   return (
 //     <div className="navbar">
 //       <input type="text" placeholder="Search..." className="search" />
@@ -23,7 +23,7 @@
 import React from "react";
 
 const Navbar = () => {
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const user = JSON.parse(sessionStorage.getItem("user") || "{}");
   const name = user?.name || "Guest";
 
   // 👉 First letter

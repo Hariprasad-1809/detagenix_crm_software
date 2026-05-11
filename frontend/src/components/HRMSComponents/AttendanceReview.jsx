@@ -4,7 +4,7 @@ import { attendanceService } from "../../services/attendanceService";
 
 const AttendanceManagement = () => {
   // State for attendance data
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const user = JSON.parse(sessionStorage.getItem("user") || "{}");
   const role = user?.role?.toUpperCase() || "";
   const [attendanceData, setAttendanceData] = useState([]);
   const [loading, setLoading] = useState(false);

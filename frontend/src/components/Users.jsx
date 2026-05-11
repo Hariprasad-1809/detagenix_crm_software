@@ -137,6 +137,10 @@ const Users = () => {
         delete userDataToSend.techStack;
       }
 
+      if (!userDataToSend.designation || userDataToSend.designation.trim() === "") {
+        delete userDataToSend.designation;
+      }
+
       const response = await userService.create(userDataToSend);
 
       // Show success popup
@@ -164,7 +168,7 @@ const Users = () => {
       }, 3000);
     } catch (error) {
       console.error("Error creating user:", error);
-      alert("Failed to create user. Please try again.");
+      alert(error.message || "Failed to create user. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -206,6 +210,10 @@ const Users = () => {
         delete userDataToSend.techStack;
       }
 
+      if (!userDataToSend.designation || userDataToSend.designation.trim() === "") {
+        delete userDataToSend.designation;
+      }
+
       const response = await userService.update(editingUserId, userDataToSend);
 
       // Show success popup
@@ -234,7 +242,7 @@ const Users = () => {
       }, 3000);
     } catch (error) {
       console.error("Error updating user:", error);
-      alert("Failed to update user. Please try again.");
+      alert(error.message || "Failed to update user. Please try again.");
     } finally {
       setLoading(false);
     }

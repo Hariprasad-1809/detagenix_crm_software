@@ -9,7 +9,7 @@ const activitySchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ["Call", "Meeting", "Email", "Follow-up"],
+      enum: ["Call", "Meeting", "Email", "WhatsApp", "Follow-up"],
       required: true,
     },
     description: {
@@ -20,6 +20,14 @@ const activitySchema = new mongoose.Schema(
       default: Date.now,
     },
     ipAddress: String,
+    followUpReminder: {
+      type: Date,
+    },
+    interactionAnalysis: {
+      sentiment: { type: String, enum: ["Positive", "Neutral", "Negative"], default: "Neutral" },
+      summary: String,
+      keyActionItems: [String]
+    }
   },
   { timestamps: true }
 );

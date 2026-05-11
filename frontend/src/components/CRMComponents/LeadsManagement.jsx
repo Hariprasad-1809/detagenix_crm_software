@@ -7,17 +7,9 @@ const LeadsManagement = () => {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
-  const [newLead, setNewLead] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    source: "Website",
-    status: "New"
-  });
   const [editingLead, setEditingLead] = useState({
     _id: "",
     name: "",
@@ -80,48 +72,6 @@ const LeadsManagement = () => {
     }
   };
 
-  // Handle Add Lead
-  const handleAddLead = async () => {
-    if (!newLead.name || !newLead.email || !newLead.phone) {
-      alert('Please fill in all required fields: Name, Email, and Phone');
-      return;
-    }
-
-    try {
-      setLoading(true);
-      const response = await crmService.leads.create(newLead);
-      
-      // Show success popup
-      setSuccessMessage(`Lead "${newLead.name}" created successfully!`);
-      setShowSuccessPopup(true);
-      
-      // Reset form
-      setNewLead({
-        name: "",
-        email: "",
-        phone: "",
-        source: "Website",
-        status: "New"
-      });
-      
-      // Close modal
-      setShowAddModal(false);
-      
-      // Refresh leads list
-      await fetchLeads();
-      
-      // Hide popup after 3 seconds
-      setTimeout(() => {
-        setShowSuccessPopup(false);
-      }, 3000);
-      
-    } catch (error) {
-      console.error('Error creating lead:', error);
-      alert(`Error creating lead: ${error.message || 'Unknown error'}`);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // Handle Update Lead
   const handleUpdateLead = async () => {
@@ -209,25 +159,6 @@ const LeadsManagement = () => {
         </h2>
         <div style={{ marginBottom: "24px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div></div>
-          <button
-            onClick={() => setShowAddModal(true)}
-            style={{
-              background: "#10b981",
-              border: "none",
-              padding: "12px 24px",
-              borderRadius: "8px",
-              fontSize: "14px",
-              cursor: "pointer",
-              color: "#ffffff",
-              fontWeight: "600",
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-            }}
-          >
-            <span>+</span>
-            Add Lead
-          </button>
         </div>
         <div
           style={{
@@ -753,177 +684,6 @@ const LeadsManagement = () => {
           </div>
         </div>
       </div>
-
-      {/* Add Lead Modal */}
-      {showAddModal && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 1000,
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "#ffffff",
-              borderRadius: "12px",
-              padding: "32px",
-              width: "90%",
-              maxWidth: "500px",
-              boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)",
-            }}
-          >
-            <h3 style={{ margin: "0 0 24px 0", fontSize: "20px", fontWeight: "600" }}>
-              Add New Lead
-            </h3>
-            
-            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-              <div>
-                <label style={{ display: "block", marginBottom: "8px", fontSize: "14px", fontWeight: "500" }}>
-                  Name *
-                </label>
-                <input
-                  type="text"
-                  value={newLead.name}
-                  onChange={(e) => setNewLead({ ...newLead, name: e.target.value })}
-                  style={{
-                    width: "100%",
-                    padding: "12px",
-                    border: "1px solid #d1d5db",
-                    borderRadius: "8px",
-                    fontSize: "14px",
-                  }}
-                  placeholder="Enter lead name"
-                />
-              </div>
-
-              <div>
-                <label style={{ display: "block", marginBottom: "8px", fontSize: "14px", fontWeight: "500" }}>
-                  Email *
-                </label>
-                <input
-                  type="email"
-                  value={newLead.email}
-                  onChange={(e) => setNewLead({ ...newLead, email: e.target.value })}
-                  style={{
-                    width: "100%",
-                    padding: "12px",
-                    border: "1px solid #d1d5db",
-                    borderRadius: "8px",
-                    fontSize: "14px",
-                  }}
-                  placeholder="Enter email address"
-                />
-              </div>
-
-              <div>
-                <label style={{ display: "block", marginBottom: "8px", fontSize: "14px", fontWeight: "500" }}>
-                  Phone *
-                </label>
-                <input
-                  type="tel"
-                  value={newLead.phone}
-                  onChange={(e) => setNewLead({ ...newLead, phone: e.target.value })}
-                  style={{
-                    width: "100%",
-                    padding: "12px",
-                    border: "1px solid #d1d5db",
-                    borderRadius: "8px",
-                    fontSize: "14px",
-                  }}
-                  placeholder="Enter phone number"
-                />
-              </div>
-
-              <div>
-                <label style={{ display: "block", marginBottom: "8px", fontSize: "14px", fontWeight: "500" }}>
-                  Source
-                </label>
-                <select
-                  value={newLead.source}
-                  onChange={(e) => setNewLead({ ...newLead, source: e.target.value })}
-                  style={{
-                    width: "100%",
-                    padding: "12px",
-                    border: "1px solid #d1d5db",
-                    borderRadius: "8px",
-                    fontSize: "14px",
-                  }}
-                >
-                  <option value="Website">Website</option>
-                  <option value="Referral">Referral</option>
-                  <option value="Email">Email</option>
-                  <option value="Social Media">Social Media</option>
-                  <option value="Cold Call">Cold Call</option>
-                </select>
-              </div>
-
-              <div>
-                <label style={{ display: "block", marginBottom: "8px", fontSize: "14px", fontWeight: "500" }}>
-                  Status
-                </label>
-                <select
-                  value={newLead.status}
-                  onChange={(e) => setNewLead({ ...newLead, status: e.target.value })}
-                  style={{
-                    width: "100%",
-                    padding: "12px",
-                    border: "1px solid #d1d5db",
-                    borderRadius: "8px",
-                    fontSize: "14px",
-                  }}
-                >
-                  <option value="New">New</option>
-                  <option value="Contacted">Contacted</option>
-                  <option value="Qualified">Qualified</option>
-                  <option value="Lost">Lost</option>
-                </select>
-              </div>
-            </div>
-
-            <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end", marginTop: "24px" }}>
-              <button
-                onClick={() => setShowAddModal(false)}
-                style={{
-                  background: "#6b7280",
-                  border: "none",
-                  padding: "12px 24px",
-                  borderRadius: "8px",
-                  fontSize: "14px",
-                  cursor: "pointer",
-                  color: "#ffffff",
-                  fontWeight: "500",
-                }}
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleAddLead}
-                disabled={loading}
-                style={{
-                  background: loading ? "#9ca3af" : "#10b981",
-                  border: "none",
-                  padding: "12px 24px",
-                  borderRadius: "8px",
-                  fontSize: "14px",
-                  cursor: loading ? "not-allowed" : "pointer",
-                  color: "#ffffff",
-                  fontWeight: "500",
-                }}
-              >
-                {loading ? "Creating..." : "Create Lead"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Edit Lead Modal */}
       {showEditModal && (

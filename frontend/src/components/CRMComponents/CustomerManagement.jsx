@@ -122,7 +122,7 @@ const CustomerManagement = () => {
         alert('Network error: Unable to connect to the server. Please check if the backend server is running on localhost:5000');
       } else if (error.message.includes('401') || error.message.includes('Unauthorized')) {
         alert('Authentication error: Please log in again');
-        localStorage.removeItem('token');
+        sessionStorage.removeItem('token');
         window.location.href = '/login';
       } else if (error.message.includes('403') || error.message.includes('Forbidden')) {
         alert('Permission denied: You do not have permission to create customers');

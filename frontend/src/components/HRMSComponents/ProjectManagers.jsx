@@ -34,7 +34,7 @@ const ProjectManagers = () => {
 
   // Get user role and fetch data
   // useEffect(() => {
-  //   const user = JSON.parse(localStorage.getItem("user"));
+  //   const user = JSON.parse(sessionStorage.getItem("user"));
   //   setUserRole(user?.role || "");
 
   //   if (user?.role === "MANAGER") {
@@ -44,7 +44,7 @@ const ProjectManagers = () => {
   //   }
   // }, []);
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = JSON.parse(sessionStorage.getItem("user"));
     setUserRole(user?.role || "");
 
     fetchProjects(); // 🔥 sab ke liye same API

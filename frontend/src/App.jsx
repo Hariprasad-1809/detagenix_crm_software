@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import PublicRoutes from "./components/routes/PublicRoutes";
 import PrivateRoutes from "./components/routes/PrivateRoutes";
@@ -18,6 +18,9 @@ import AttendanceManagement from "./components/HRMSComponents/AttendanceManageme
 import EmployeeProfile from "./components/HRMSComponents/EmployeesProfile";
 import LeaveManagement from "./components/HRMSComponents/LeaveManagement";
 import PayrollManagement from "./components/HRMSComponents/PayrollManagement";
+import AddLead from "./pages/CRM/AddLead";
+import LeadConversion from "./pages/CRM/LeadConversion";
+import LeadGeneration from "./pages/CRM/LeadGeneration";
 import CustomerManagement from "./components/CRMComponents/CustomerManagement";
 import EmployeesOnboarding from "./components/HRMSComponents/EmployeesOnboarding";
 import PerformanceAppraisal from "./components/HRMSComponents/PerformanceAppraisal";
@@ -29,6 +32,12 @@ import BDEDashboard from "./components/SalesDashboard/SalesDashboard";
 import UserList from "./components/UserList"
 import ProjectManagers from "./components/HRMSComponents/ProjectManagers"
 import AttendanceReview from "./components/HRMSComponents/AttendanceReview"
+
+import CompanyProfile from "./components/Settings/CompanyProfile";
+import RolesPermissions from "./components/Settings/RolesPermissions";
+import SecurityCompliance from "./components/Settings/SecurityCompliance";
+import AISettings from "./components/Settings/AISettings";
+
 import "./App.css";
 
 function App() {
@@ -39,11 +48,7 @@ function App() {
           {/* Public Routes */}
           <Route
             path="/"
-            element={
-              <PublicRoutes>
-                <Home />
-              </PublicRoutes>
-            }
+            element={<Navigate to="/login" replace />}
           />
           <Route
             path="/login"
@@ -162,6 +167,30 @@ element={
             }
           />
           <Route
+            path="/crm/add-lead"
+            element={
+              <PrivateRoutes>
+                <AddLead />
+              </PrivateRoutes>
+            }
+          />
+          <Route
+            path="/crm/lead-conversion"
+            element={
+              <PrivateRoutes>
+                <LeadConversion />
+              </PrivateRoutes>
+            }
+          />
+          <Route
+            path="/crm/lead-generation"
+            element={
+              <PrivateRoutes>
+                <LeadGeneration />
+              </PrivateRoutes>
+            }
+          />
+          <Route
             path="/sales-activities"
             element={
               <PrivateRoutes>
@@ -249,6 +278,40 @@ element={
     </PrivateRoutes>
   }
 />
+
+  {/* Settings & Security Routes */}
+  <Route
+    path="/settings/company-profile"
+    element={
+      <PrivateRoutes>
+        <CompanyProfile />
+      </PrivateRoutes>
+    }
+  />
+  <Route
+    path="/settings/roles-permissions"
+    element={
+      <PrivateRoutes>
+        <RolesPermissions />
+      </PrivateRoutes>
+    }
+  />
+  <Route
+    path="/settings/security-compliance"
+    element={
+      <PrivateRoutes>
+        <SecurityCompliance />
+      </PrivateRoutes>
+    }
+  />
+  <Route
+    path="/settings/ai-settings"
+    element={
+      <PrivateRoutes>
+        <AISettings />
+      </PrivateRoutes>
+    }
+  />
   
   {/* EmployeeSelfService */}
           {/* Catch all route */}

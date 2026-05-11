@@ -4,7 +4,7 @@ import DashboardLayout from "../DashboardComponents/DashboardLayout";
 import { userService } from "../../services/userService";
 import profileImg from "../../assets/profileimg.png"
 const EmployeeProfile = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(sessionStorage.getItem("user"));
   const id = user?.id;
   const navigate = useNavigate();
 

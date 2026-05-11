@@ -18,9 +18,9 @@
 //   const [isUserManagementOpen, setIsUserManagementOpen] = useState(false);
 
 //   useEffect(() => {
-//     // Check for token in localStorage on app load
-//     const token = localStorage.getItem('token');
-//     const userData = localStorage.getItem('user');
+//     // Check for token in sessionStorage on app load
+//     const token = sessionStorage.getItem('token');
+//     const userData = sessionStorage.getItem('user');
     
 //     if (token && userData) {
 //       setIsAuthenticated(true);
@@ -30,15 +30,15 @@
 //   }, []);
 
 //   const login = (token, userData) => {
-//     localStorage.setItem('token', token);
-//     localStorage.setItem('user', JSON.stringify(userData));
+//     sessionStorage.setItem('token', token);
+//     sessionStorage.setItem('user', JSON.stringify(userData));
 //     setIsAuthenticated(true);
 //     setUser(userData);
 //   };
 
 //   const logout = () => {
-//     localStorage.removeItem('token');
-//     localStorage.removeItem('user');
+//     sessionStorage.removeItem('token');
+//     sessionStorage.removeItem('user');
 //     setIsAuthenticated(false);
 //     setUser(null);
 //   };
@@ -95,8 +95,8 @@ export const AuthProvider = ({ children }) => {
   const [isHrmsOpen, setIsHrmsOpen] = useState(false); // ✅ ADDED
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userData = localStorage.getItem('user');
+    const token = sessionStorage.getItem('token');
+    const userData = sessionStorage.getItem('user');
     
     if (token && userData) {
       setIsAuthenticated(true);
@@ -111,14 +111,18 @@ export const AuthProvider = ({ children }) => {
       if (token && userData) {
         setIsAuthenticated(true);
         setUser(userData);
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(userData));
+        sessionStorage.setItem('token', token);
+        sessionStorage.setItem('user', JSON.stringify(userData));
         return { success: true };
       } else {
         // Handle credentials login via authService
-        const response = await authService.login(credentials);
+        const response = await authService.login(token); // Notice 'token' parameter may hold credentials here if called with 1 arg
+        
+        // Use user directly from response
+        const loggedInUser = response.user;
+        
         setIsAuthenticated(true);
-        setUser(response.data.user);
+        setUser(loggedInUser);
         return response;
       }
     } catch (error) {
@@ -130,6 +134,9 @@ export const AuthProvider = ({ children }) => {
     authService.logout();
     setIsAuthenticated(false);
     setUser(null);
+    setIsCrmOpen(false);
+    setIsUserManagementOpen(false);
+    setIsHrmsOpen(false);
   };
 
   // Toggle CRM

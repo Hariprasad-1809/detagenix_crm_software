@@ -31,6 +31,23 @@ const customerSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    renewalProbability: {
+      type: Number,
+      min: 0,
+      max: 100,
+      default: 50
+    },
+    relationshipHealthScore: {
+      type: Number,
+      min: 0,
+      max: 100,
+      default: 80
+    },
+    churnRisk: {
+      type: String,
+      enum: ["High", "Medium", "Low"],
+      default: "Low"
+    }
   },
   { timestamps: true }
 );
