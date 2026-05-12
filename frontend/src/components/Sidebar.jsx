@@ -50,6 +50,7 @@ const Sidebar = () => {
       "/sales-activities",
       "/sales-pipeline",
       "/forecast",
+      "/ai-insights",
       "/customer-management",
     ];
 
@@ -210,6 +211,18 @@ const Sidebar = () => {
 
             {isCrmOpen && (
               <>
+                <li
+                  onClick={() => menuNavigate("/ai-insights")}
+                  style={{
+                    paddingLeft: "45px",
+                    cursor: "pointer",
+                    fontWeight: isActive("/ai-insights") ? "700" : "500",
+                    color: isActive("/ai-insights") ? "#ffffff" : "#e2e8f0",
+                    backgroundColor: isActive("/ai-insights") ? "#0ea5e9" : "transparent",
+                  }}
+                >
+                  AI Insights
+                </li>
                 <li
                   onClick={() => {
                     menuNavigate("/leads-management");

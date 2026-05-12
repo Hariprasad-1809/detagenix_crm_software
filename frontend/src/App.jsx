@@ -21,6 +21,7 @@ import PayrollManagement from "./components/HRMSComponents/PayrollManagement";
 import AddLead from "./pages/CRM/AddLead";
 import LeadConversion from "./pages/CRM/LeadConversion";
 import LeadGeneration from "./pages/CRM/LeadGeneration";
+import AIInsights from "./pages/CRM/AIInsights";
 import CustomerManagement from "./components/CRMComponents/CustomerManagement";
 import EmployeesOnboarding from "./components/HRMSComponents/EmployeesOnboarding";
 import PerformanceAppraisal from "./components/HRMSComponents/PerformanceAppraisal";
@@ -187,6 +188,14 @@ element={
             element={
               <PrivateRoutes>
                 <LeadGeneration />
+              </PrivateRoutes>
+            }
+          />
+          <Route
+            path="/ai-insights"
+            element={
+              <PrivateRoutes>
+                <AIInsights />
               </PrivateRoutes>
             }
           />
